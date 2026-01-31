@@ -110,7 +110,7 @@ class ShoppingCart {
       const emptyRow = document.createElement("tr");
       emptyRow.innerHTML = `
         <td colspan="4" style="text-align: center; padding: 40px 0;">
-            <span class="blink"> [ WAITING_FOR_DATA_STREAM... ]</span>
+            <span class="blink"> [ ACCESSING_ENCRYPTED_DATA... ]</span>
             </td>
             `;
       tableBody.appendChild(emptyRow);
