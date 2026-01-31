@@ -152,12 +152,13 @@ body {
 .left-nav {
   position: fixed;
   top: 0;
-  left: -320px;
+  left: 0;
   height: 100vh;
   background: rgba(0, 0, 0, 0.95);
   border-right: 2px solid rgb(155, 254, 7);
   padding: 100px 40px;
   transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+  transform: translateX(-100%);
 }
 
 .left-nav p:hover {
@@ -185,7 +186,7 @@ body {
 }
 
 .left-nav.open {
-  transform: translateX(320px);
+  transform: translateX(0);
 }
 
 .menu-scanner {
@@ -327,7 +328,7 @@ body {
   display: flex;
   flex-direction: column;
   top: 0;
-  right: -600px;
+  right: -100%;
   height: 100vh;
   background: rgba(0, 0, 0, 0.95);
   border-left: 2px solid rgb(155, 254, 7);
@@ -379,7 +380,7 @@ body {
 }
 
 .blink {
-  animation: blinker 2.5s linear infinite;
+  animation: blinker 1.5s linear infinite;
 }
 
 @keyframes blinker {
