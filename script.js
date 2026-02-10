@@ -77,16 +77,24 @@ class ShoppingCart {
   }
 
   calculateTotal() {
-    this.totalPrice = this.items.reduce(
+    const itemsTotal = this.items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
+
+    const selectedShipping = document.querySelector(
+      `input[name="shipping"]:checked`,
+    );
+    const shippingPrice = selectedShipping ? Number(selectedShipping.value) : 0;
+
+    this.totalPrice = itemsTotal + shippingPrice;
   }
 
   render() {
     const listContainer = document.querySelector(".cart-items-list");
     const priceLabel = document.querySelector(".total-price");
     const countLabel = document.querySelector(".cart-count");
+    const checkoutBtn = document.querySelector(".checkout-btn");
 
     if (!listContainer) return;
 
@@ -103,17 +111,16 @@ class ShoppingCart {
         <tbody id="cart-table-body"></tbody>
       </table>
     `;
-
+    
     const tableBody = document.getElementById("cart-table-body");
 
     if (this.items.length === 0) {
-      const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = `
+      tableBody.innerHTML = `
         <td colspan="4" style="text-align: center; padding: 40px 0;">
             <span class="blink"> [ ACCESSING_ENCRYPTED_DATA... ]</span>
             </td>
             `;
-      tableBody.appendChild(emptyRow);
+    
     } else {
       this.items.forEach((item) => {
         const row = document.createElement("tr");
@@ -136,10 +143,20 @@ class ShoppingCart {
     }
     if (priceLabel) priceLabel.innerText = this.totalPrice.toLocaleString();
 
+    const checkoutTotalLabel = document.querySelector(".checkout-total-price");
+    if (checkoutTotalLabel) {
+      checkoutTotalLabel.innerText = this.totalPrice.toLocaleString();
+    }
+    if (checkoutBtn) {
+      const isEmpty = this.items.length === 0;
+      checkoutBtn.disabled = isEmpty;
+      checkoutBtn.style.opacity = isEmpty ? "0.3" : "1";
+      checkoutBtn.style.filter = isEmpty ? "grayscale(1)" : "none";
+      checkoutBtn.style.cursor = isEmpty ? "not-allowed" : "pointer";
+    }
     const totalQty = this.items.reduce((sum, item) => sum + item.quantity, 0);
     if (countLabel) {
       countLabel.innerText = `[${totalQty}]`;
-
       countLabel.style.color = "#ff00ff";
       setTimeout(() => {
         countLabel.style.color = "";
@@ -183,8 +200,49 @@ if (cartCloseTrigger) {
   cartCloseTrigger.addEventListener("click", () => {
     cartPanel.classList.remove("open");
     cartOpenTrigger.classList.remove("hidden");
+
+    setTimeout(() => {
+      orderBlock.style.display = `block`;
+      formBlock.style.display = `none`;
+      console.log("System: UI Reset to MARKET_LIST...");
+    }, 200);
+
     console.log("System: Vault secured. Restoring chip...");
   });
 }
 
 myCart.render();
+
+const orderBlock = document.querySelector(`.cart-order-block`);
+const formBlock = document.querySelector(`.checkout-form-block`);
+const checkoutBtn = document.querySelector(`.checkout-btn`);
+
+if (checkoutBtn) {
+  checkoutBtn.addEventListener(`click`, () => {
+    orderBlock.style.display = `none`;
+    formBlock.style.display = `flex`;
+
+    console.log("System: Morphing to TRANSACTION_DATA...");
+  });
+}
+
+const shippingOptions = document.querySelectorAll(`input[name="shipping"]`);
+
+shippingOptions.forEach((option) => {
+  option.addEventListener(`change`, () => {
+    myCart.calculateTotal();
+    myCart.render();
+    console.log(`System: Logistics updated. New total: ${myCart.totalPrice} CR`);
+  });
+});
+
+const backButton = document.querySelector(`.back-to-cart-btn`);
+
+if (backButton) {
+  backButton.addEventListener(`click`, () => {
+    formBlock.style.display = `none`;
+    orderBlock.style.display = `block`;
+
+    console.log("System: Rewinding transaction... Returning to data stream.");
+  });
+}
