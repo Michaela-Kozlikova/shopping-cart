@@ -181,14 +181,66 @@
       </div>
     </section>
     <div class="cart-sidebar" id="cartSidebar">
-      <div class="cart-header">
-        <h2>[ CURRENT_LOAD ]</h2>
-        <button id="closeCart">X</button>
+      <button id="closeCart">X</button>
+
+      <div class="cart-order-block">
+        <div class="cart-header">
+          <h2>[ CURRENT_LOAD ]</h2>
+        </div>
+        <div class="cart-items-list"></div>
+        <div class="cart-footer">
+          <p>CURRENT_DAMAGE: <span class="total-price">0</span> CREDITS</p>
+          <button class="checkout-btn">EXECUTE_TRANSACTION</button>
+        </div>
       </div>
-      <div class="cart-items-list"></div>
-      <div class="cart-footer">
-        <p>TOTAL_DAMAGE: <span class="total-price">0</span> CREDITS</p>
-        <button class="checkout-btn">EXECUTE_TRANSACTION</button>
+
+      <div class="checkout-form-block" style="display: none">
+        <div class="back-to-cart-btn">
+          <span class="arrow"> <<< </span>
+        </div>
+        <div class="contact-form">
+          <p>AUTHENTICATE_USER_FOR_DELIVERY</p>
+          <input type="text" name="name" placeholder="FIRST_NAME" autocomplete="given-name" required />
+          <input type="text" name="surname" placeholder="SECOND_NAME" autocomplete="family-name" required />
+          <input type="email" name="email" placeholder="NEURAL_MAIL_LINK" autocomplete="email" required />
+          <input type="text" name="address" placeholder="ZONE_ADDRESS" autocomplete="street-address" required />
+        </div>
+
+        <div class="shipping-section">
+          <p>SELECT_LOGISTIC_METHOD:</p>
+          <div class="shipping-options">
+            <label class="ship-option">
+              <input type="radio" name="shipping" value="500" checked />
+              <div class="option-content">
+                <span class="delivery-method-name">ORBITAL_LAUNCH [Heavy Rocket] <span class="option-price">+500 CR</span></span>
+                <br>
+                <small class="method-description">Arrival in 3 seconds. May incinerate your front porch and the neighbor's cat.</small>
+              </div>
+            </label>
+
+            <label class="ship-option">
+              <input type="radio" name="shipping" value="250" />
+              <div class="option-content">
+                <span class="delivery-method-name">STAR_WAVE_ROUTING [Quantum Drift] <span class="option-price">+250 CR</span></span>
+                <br>
+                <small class="method-description">Package exists in a state of superposition. You'll receive it yesterday and tomorrow simultaneously.</small>
+              </div>
+            </label>
+
+            <label class="ship-option">
+              <input type="radio" name="shipping" value="0" />
+              <div class="option-content">
+                <span class="delivery-method-name">CITADEL_DRONE [Local Selector Only] <span class="option-price">FREE</span></span>
+                <br>
+                <small class="method-description">Only flies in clear weather, zero wind, and if the pilot isn't playing video games.</small>
+              </div>
+            </label>
+            <div class="checkout-footer">
+              <div class="final-checkout-price"> TOTAL_DAMAGE: <span class="checkout-total-price"> 0 </span> CREDITS</div>
+              <span class="confirm-order-btn">CONFIRM_ORDER</span>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
     <div class="footer">
