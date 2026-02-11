@@ -175,6 +175,10 @@ if (cartOpenTrigger) {
   cartOpenTrigger.addEventListener("click", () => {
     cartPanel.classList.add("open");
     cartOpenTrigger.classList.add("hidden");
+
+    if (scanner) {
+      scanner.style.display = `none`;
+    }
     console.log("System: Vault opened. Hiding chip...");
   });
 }
@@ -183,6 +187,10 @@ if (cartCloseTrigger) {
   cartCloseTrigger.addEventListener("click", () => {
     cartPanel.classList.remove("open");
     cartOpenTrigger.classList.remove("hidden");
+
+    if (scanner) {
+      scanner.style.display = `flex`;
+    }
     console.log("System: Vault secured. Restoring chip...");
   });
 }
