@@ -554,6 +554,11 @@ body {
   margin: 120px;
 }
 
+.final-checkout-price {
+  display: flex;
+  gap: 5px;
+}
+
 .confirm-order-btn {
   display: block;
   margin: 0 auto;
