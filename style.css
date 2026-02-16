@@ -70,14 +70,14 @@ body {
     transform 0s;
 }
 
-.cart-count {
+.cart-sidebar__cart-count {
   color: rgb(155, 254, 7);
   transition:
     color 0s,
     text-shadow 0s;
 }
 
-.cart-chip:hover .cart-count {
+.cart-chip:hover .cart-sidebar__cart-count {
   color: #ff00ff;
   text-shadow: 0 0 10px #ff00ff;
   transition:
@@ -283,7 +283,7 @@ body {
 }
 
 .product-card-description {
-  padding: 15px;
+  padding: 14px;
   text-align: center;
 }
 
@@ -295,7 +295,7 @@ body {
 
 .product-card-description p {
   display: none;
-  margin-top: 15px;
+  margin-top: 14px;
   color: white;
   line-height: 1.4;
   border-top: 1px solid rgb(155, 254, 7);
@@ -340,24 +340,24 @@ body {
   width: 540px;
 }
 
-#closeCart {
+.cart-sidebar__close-btn {
   background: transparent;
   position: absolute;
   color: black;
-  top: 15px;
-  right: 15px;
+  top: 14px;
+  right: 14px;
   background-color: white;
   transition: all 0.3s ease;
   cursor: pointer;
   z-index: 1001;
 }
 
-#closeCart:hover {
+.cart-sidebar__close-btn:hover {
   background: #ff5aff;
   color: white;
 }
 
-.cart-header {
+.cart-sidebar__header {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -367,7 +367,7 @@ body {
   margin-top: 30px;
 }
 
-.cart-header h2 {
+.cart-sidebar__header h2 {
   margin: 0;
   padding: 0;
   left: 0;
@@ -388,17 +388,17 @@ body {
   }
 }
 
-.back-to-cart-btn {
+.cart-sidebar__back-to-cart-btn {
   display: flex;
   color: rgb(155, 254, 7);
   cursor: pointer;
   position: absolute;
-  margin: 15px;
-  left: 15px;
+  margin: 14px;
+  left: 14px;
   top: 0;
 }
 
-.back-to-cart-btn .arrow {
+.cart-sidebar__back-to-cart-btn .arrow {
   font-size: 1.4rem;
 }
 
@@ -407,7 +407,7 @@ body {
   transform: translateX(-5px);
 }
 
-.cart-footer {
+.cart-sidebar__footer {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -418,7 +418,7 @@ body {
   margin: 0 auto;
 }
 
-.checkout-btn {
+.cart-sidebar__checkout-btn {
   color: white;
   border: none;
   padding: 10px;
@@ -431,21 +431,21 @@ body {
   font-size: 0.85rem;
 }
 
-.checkout-btn:hover {
+.cart-sidebar__checkout-btn:hover {
   background: rgb(155, 254, 7);
   color: black;
 }
 
-#cartSidebar .checkout-form-block input,
-#cartSidebar .checkout-form-block button,
-#cartSidebar .checkout-form-block label {
+.cart-sidebar .cart-sidebar__checkout-form-block input,
+.cart-sidebar .cart-sidebar__checkout-form-block button,
+.cart-sidebar .cart-sidebar__checkout-form-block label {
   font-family: "Share Tech Mono", monospace;
   letter-spacing: 1px;
   font-size: 1rem;
   font-weight: bold;
 }
 
-.checkout-form-block {
+.cart-sidebar__checkout-form-block {
   display: flex;
   flex-direction: column;
   margin: 0 auto;
@@ -455,7 +455,7 @@ body {
   padding-top: 20px;
 }
 
-.contact-form {
+.cart-sidebar__contact-form {
   display: flex;
   flex-direction: column;
   max-width: 300px;
@@ -464,11 +464,11 @@ body {
   margin: 0 auto;
 }
 
-.contact-form p {
+.cart-sidebar__contact-form p {
   font-size: 1.2rem;
 }
 
-.contact-form input {
+.cart-sidebar__contact-form input {
   background-color: #061f02;
   color: white;
   width: 100%;
@@ -494,7 +494,7 @@ body {
   margin: 0;
   width: 20px;
   height: 20px;
-  border: 2px solid #ff00ff; 
+  border: 2px solid #ff00ff;
   background: #061f02;
   cursor: pointer;
   position: relative;
@@ -527,7 +527,7 @@ body {
 
 .ship-option {
   display: flex;
-  padding: 15px;
+  padding: 14px;
   cursor: pointer;
 }
 

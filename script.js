@@ -90,11 +90,47 @@ class ShoppingCart {
     this.totalPrice = itemsTotal + shippingPrice;
   }
 
+  initCheckoutListeners() {
+    const orderBlock = document.querySelector(`.cart-sidebar__order-block`);
+    const formBlock = document.querySelector(`.cart-sidebar__checkout-form-block`);
+    const checkoutBtn = document.querySelector(`.cart-sidebar__checkout-btn`);
+    const backBtn = document.querySelector(`.cart-sidebar__back-to-cart-btn`);
+    const shippingOptions = document.querySelectorAll(`input[name="shipping"]`);
+
+    if (checkoutBtn && orderBlock && formBlock) {
+      checkoutBtn.onclick = () => {
+        orderBlock.style.display = `none`;
+        formBlock.style.display = `flex`;
+        console.log("System: Morphing to TRANSACTION_DATA...");
+      };
+    }
+
+    shippingOptions.forEach((option) => {
+      option.onchange = () => {
+        this.calculateTotal();
+        this.render();
+
+        console.log(`System: Logistics updated. New total: ${myCart.totalPrice} CR`,);
+      };
+    });
+
+    if (backBtn && orderBlock && formBlock) {
+      backBtn.onclick = () => {
+        formBlock.style.display = `none`;
+        orderBlock.style.display = `block`;
+
+        console.log(
+          "System: Rewinding transaction... Returning to data stream.",
+        );
+      };
+    }
+  }
+
   render() {
-    const listContainer = document.querySelector(".cart-items-list");
-    const priceLabel = document.querySelector(".total-price");
-    const countLabel = document.querySelector(".cart-count");
-    const checkoutBtn = document.querySelector(".checkout-btn");
+    const listContainer = document.querySelector(".cart-sidebar__cart-items-list");
+    const priceLabel = document.querySelector(".cart-sidebar__total-price");
+    const countLabel = document.querySelector(".cart-sidebar__cart-count");
+    const checkoutBtn = document.querySelector(".cart-sidebar__checkout-btn");
 
     if (!listContainer) return;
 
@@ -103,15 +139,15 @@ class ShoppingCart {
       <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
         <thead>
           <tr style="border-bottom: 2px solid #ff00ff;">
-            <th style="text-align: left; padding: 5px;">ITEM</th>
-            <th style="text-align: right; padding: 5px;">QTY</th>
-            <th style="text-align: right; padding: 5px;">PRICE</th>
+            <th style="text-align: left; padding: 6px;">ITEM</th>
+            <th style="text-align: right; padding: 6px;">QTY</th>
+            <th style="text-align: right; padding: 6px;">PRICE</th>
           </tr>
         </thead>
         <tbody id="cart-table-body"></tbody>
       </table>
     `;
-    
+
     const tableBody = document.getElementById("cart-table-body");
 
     if (this.items.length === 0) {
@@ -120,15 +156,14 @@ class ShoppingCart {
             <span class="blink"> [ WAITING_FOR_DATA_STREAM... ]</span>
             </td>
             `;
-    
     } else {
       this.items.forEach((item) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-        <td style="text-align: left; padding: 5px;"> ${item.name}</td>
-        <td style="text-align: right; padding: 5px;"> ${item.quantity}</td>
-        <td style="text-align: right; padding: 5px;"> ${(item.price * item.quantity).toLocaleString()} CR</td>
-        <td style="text-align: center; padding: 10px 5px; border-bottom: 1px solid rgba(0, 255, 65, 0.1);">
+        <td style="text-align: left; padding: 6px;"> ${item.name}</td>
+        <td style="text-align: right; padding: 6px;"> ${item.quantity}</td>
+        <td style="text-align: right; padding: 6px;"> ${(item.price * item.quantity).toLocaleString()} CR</td>
+        <td style="text-align: center; padding: 10px 6px; border-bottom: 1px solid rgba(0, 255, 65, 0.1);">
           <button class="remove-item" data-name="${item.name}" style="background:none; border:1px solid #ff00ff; color:#ff00ff; cursor:pointer; padding: 2px 6px;">-</button>
         </td>
       `;
@@ -162,6 +197,7 @@ class ShoppingCart {
         countLabel.style.color = "";
       }, 150);
     }
+    this.initCheckoutListeners();
   }
 }
 
@@ -184,9 +220,9 @@ allBuyButtons.forEach((button) => {
   });
 });
 
-const cartPanel = document.getElementById("cartSidebar");
+const cartPanel = document.querySelector(".cart-sidebar");
 const cartOpenTrigger = document.querySelector(".cart-chip");
-const cartCloseTrigger = document.getElementById("closeCart");
+const cartCloseTrigger = document.querySelector(".cart-sidebar__close-btn");
 
 if (cartOpenTrigger) {
   cartOpenTrigger.addEventListener("click", () => {
@@ -202,9 +238,14 @@ if (cartCloseTrigger) {
     cartOpenTrigger.classList.remove("hidden");
 
     setTimeout(() => {
-      orderBlock.style.display = `block`;
-      formBlock.style.display = `none`;
-      console.log("System: UI Reset to MARKET_LIST...");
+      const orderBlock = document.querySelector(`.cart-sidebar__order-block`);
+      const formBlock = document.querySelector(`.cart-sidebar__checkout-form-block`);
+
+      if (orderBlock && formBlock) {
+        orderBlock.style.display = `block`;
+        formBlock.style.display = `none`;
+        console.log("System: UI Reset to MARKET_LIST...");
+      }
     }, 200);
 
     console.log("System: Vault secured. Restoring chip...");
@@ -213,36 +254,4 @@ if (cartCloseTrigger) {
 
 myCart.render();
 
-const orderBlock = document.querySelector(`.cart-order-block`);
-const formBlock = document.querySelector(`.checkout-form-block`);
-const checkoutBtn = document.querySelector(`.checkout-btn`);
 
-if (checkoutBtn) {
-  checkoutBtn.addEventListener(`click`, () => {
-    orderBlock.style.display = `none`;
-    formBlock.style.display = `flex`;
-
-    console.log("System: Morphing to TRANSACTION_DATA...");
-  });
-}
-
-const shippingOptions = document.querySelectorAll(`input[name="shipping"]`);
-
-shippingOptions.forEach((option) => {
-  option.addEventListener(`change`, () => {
-    myCart.calculateTotal();
-    myCart.render();
-    console.log(`System: Logistics updated. New total: ${myCart.totalPrice} CR`);
-  });
-});
-
-const backButton = document.querySelector(`.back-to-cart-btn`);
-
-if (backButton) {
-  backButton.addEventListener(`click`, () => {
-    formBlock.style.display = `none`;
-    orderBlock.style.display = `block`;
-
-    console.log("System: Rewinding transaction... Returning to data stream.");
-  });
-}
