@@ -153,7 +153,7 @@ class ShoppingCart {
     if (this.items.length === 0) {
       tableBody.innerHTML = `
         <td colspan="4" style="text-align: center; padding: 40px 0;">
-            <span class="blink"> [ WAITING_FOR_DATA_STREAM... ]</span>
+            <span class="blink"> [ ACCESSING_ENCRYPTED_DATA... ]</span>
             </td>
             `;
     } else {
@@ -228,6 +228,10 @@ if (cartOpenTrigger) {
   cartOpenTrigger.addEventListener("click", () => {
     cartPanel.classList.add("open");
     cartOpenTrigger.classList.add("hidden");
+
+    if (scanner) {
+      scanner.style.display = `none`;
+    }
     console.log("System: Vault opened. Hiding chip...");
   });
 }
@@ -248,6 +252,9 @@ if (cartCloseTrigger) {
       }
     }, 200);
 
+    if (scanner) {
+      scanner.style.display = `flex`;
+    }
     console.log("System: Vault secured. Restoring chip...");
   });
 }
