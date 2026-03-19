@@ -77,16 +77,60 @@ class ShoppingCart {
   }
 
   calculateTotal() {
-    this.totalPrice = this.items.reduce(
+    const itemsTotal = this.items.reduce(
       (sum, item) => sum + item.price * item.quantity,
       0,
     );
+
+    const selectedShipping = document.querySelector(
+      `input[name="shipping"]:checked`,
+    );
+    const shippingPrice = selectedShipping ? Number(selectedShipping.value) : 0;
+
+    this.totalPrice = itemsTotal + shippingPrice;
+  }
+
+  initCheckoutListeners() {
+    const orderBlock = document.querySelector(`.cart-sidebar__order-block`);
+    const formBlock = document.querySelector(`.cart-sidebar__checkout-form-block`);
+    const checkoutBtn = document.querySelector(`.cart-sidebar__checkout-btn`);
+    const backBtn = document.querySelector(`.cart-sidebar__back-to-cart-btn`);
+    const shippingOptions = document.querySelectorAll(`input[name="shipping"]`);
+
+    if (checkoutBtn && orderBlock && formBlock) {
+      checkoutBtn.onclick = () => {
+        orderBlock.style.display = `none`;
+        formBlock.style.display = `flex`;
+        console.log("System: Morphing to TRANSACTION_DATA...");
+      };
+    }
+
+    shippingOptions.forEach((option) => {
+      option.onchange = () => {
+        this.calculateTotal();
+        this.render();
+
+        console.log(`System: Logistics updated. New total: ${myCart.totalPrice} CR`,);
+      };
+    });
+
+    if (backBtn && orderBlock && formBlock) {
+      backBtn.onclick = () => {
+        formBlock.style.display = `none`;
+        orderBlock.style.display = `block`;
+
+        console.log(
+          "System: Rewinding transaction... Returning to data stream.",
+        );
+      };
+    }
   }
 
   render() {
-    const listContainer = document.querySelector(".cart-items-list");
-    const priceLabel = document.querySelector(".total-price");
-    const countLabel = document.querySelector(".cart-count");
+    const listContainer = document.querySelector(".cart-sidebar__cart-items-list");
+    const priceLabel = document.querySelector(".cart-sidebar__total-price");
+    const countLabel = document.querySelector(".cart-sidebar__cart-count");
+    const checkoutBtn = document.querySelector(".cart-sidebar__checkout-btn");
 
     if (!listContainer) return;
 
@@ -95,9 +139,9 @@ class ShoppingCart {
       <table style="width: 100%; border-collapse: collapse; margin-top: 10px;">
         <thead>
           <tr style="border-bottom: 2px solid #ff00ff;">
-            <th style="text-align: left; padding: 5px;">ITEM</th>
-            <th style="text-align: right; padding: 5px;">QTY</th>
-            <th style="text-align: right; padding: 5px;">PRICE</th>
+            <th style="text-align: left; padding: 6px;">ITEM</th>
+            <th style="text-align: right; padding: 6px;">QTY</th>
+            <th style="text-align: right; padding: 6px;">PRICE</th>
           </tr>
         </thead>
         <tbody id="cart-table-body"></tbody>
@@ -107,21 +151,19 @@ class ShoppingCart {
     const tableBody = document.getElementById("cart-table-body");
 
     if (this.items.length === 0) {
-      const emptyRow = document.createElement("tr");
-      emptyRow.innerHTML = `
+      tableBody.innerHTML = `
         <td colspan="4" style="text-align: center; padding: 40px 0;">
             <span class="blink"> [ ACCESSING_ENCRYPTED_DATA... ]</span>
             </td>
             `;
-      tableBody.appendChild(emptyRow);
     } else {
       this.items.forEach((item) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-        <td style="text-align: left; padding: 5px;"> ${item.name}</td>
-        <td style="text-align: right; padding: 5px;"> ${item.quantity}</td>
-        <td style="text-align: right; padding: 5px;"> ${(item.price * item.quantity).toLocaleString()} CR</td>
-        <td style="text-align: center; padding: 10px 5px; border-bottom: 1px solid rgba(0, 255, 65, 0.1);">
+        <td style="text-align: left; padding: 6px;"> ${item.name}</td>
+        <td style="text-align: right; padding: 6px;"> ${item.quantity}</td>
+        <td style="text-align: right; padding: 6px;"> ${(item.price * item.quantity).toLocaleString()} CR</td>
+        <td style="text-align: center; padding: 10px 6px; border-bottom: 1px solid rgba(0, 255, 65, 0.1);">
           <button class="remove-item" data-name="${item.name}" style="background:none; border:1px solid #ff00ff; color:#ff00ff; cursor:pointer; padding: 2px 6px;">-</button>
         </td>
       `;
@@ -136,15 +178,26 @@ class ShoppingCart {
     }
     if (priceLabel) priceLabel.innerText = this.totalPrice.toLocaleString();
 
+    const checkoutTotalLabel = document.querySelector(".checkout-total-price");
+    if (checkoutTotalLabel) {
+      checkoutTotalLabel.innerText = this.totalPrice.toLocaleString();
+    }
+    if (checkoutBtn) {
+      const isEmpty = this.items.length === 0;
+      checkoutBtn.disabled = isEmpty;
+      checkoutBtn.style.opacity = isEmpty ? "0.3" : "1";
+      checkoutBtn.style.filter = isEmpty ? "grayscale(1)" : "none";
+      checkoutBtn.style.cursor = isEmpty ? "not-allowed" : "pointer";
+    }
     const totalQty = this.items.reduce((sum, item) => sum + item.quantity, 0);
     if (countLabel) {
       countLabel.innerText = `[${totalQty}]`;
-
       countLabel.style.color = "#ff00ff";
       setTimeout(() => {
         countLabel.style.color = "";
       }, 150);
     }
+    this.initCheckoutListeners();
   }
 }
 
@@ -167,9 +220,9 @@ allBuyButtons.forEach((button) => {
   });
 });
 
-const cartPanel = document.getElementById("cartSidebar");
+const cartPanel = document.querySelector(".cart-sidebar");
 const cartOpenTrigger = document.querySelector(".cart-chip");
-const cartCloseTrigger = document.getElementById("closeCart");
+const cartCloseTrigger = document.querySelector(".cart-sidebar__close-btn");
 
 if (cartOpenTrigger) {
   cartOpenTrigger.addEventListener("click", () => {
@@ -188,6 +241,17 @@ if (cartCloseTrigger) {
     cartPanel.classList.remove("open");
     cartOpenTrigger.classList.remove("hidden");
 
+    setTimeout(() => {
+      const orderBlock = document.querySelector(`.cart-sidebar__order-block`);
+      const formBlock = document.querySelector(`.cart-sidebar__checkout-form-block`);
+
+      if (orderBlock && formBlock) {
+        orderBlock.style.display = `block`;
+        formBlock.style.display = `none`;
+        console.log("System: UI Reset to MARKET_LIST...");
+      }
+    }, 200);
+
     if (scanner) {
       scanner.style.display = `flex`;
     }
@@ -196,3 +260,5 @@ if (cartCloseTrigger) {
 }
 
 myCart.render();
+
+
