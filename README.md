@@ -9,4 +9,4 @@ A visually striking e-commerce interface with a futuristic Cyberpunk aesthetic. 
 - **Vanilla JavaScript**
 
 ## 🚀 Live Demo
-Enter the shop here: https://cyberpunk-shopping-cart.netlify.app
+Enter the shop here: https://trial-shopping-cart.vercel.app
